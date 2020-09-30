@@ -19,14 +19,7 @@ public class riceframework {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        ConexaoSQLite conexaoSQLite = new ConexaoSQLite();
-        CriarBancoSQLite criarBancoSQLite = new CriarBancoSQLite(conexaoSQLite);
         
-        conexaoSQLite.conectar();
-        criarBancoSQLite.criarTabelaFuncionario();
-        criarBancoSQLite.criarTabelaProduto();
-        criarBancoSQLite.criarTabelaCliente();
-        criarBancoSQLite.criarTabelaFornecedor();
         
         
         

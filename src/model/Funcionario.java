@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Classes;
+package model;
 
 /**
  *
  * @author Luan
  */
-public class Funcionarios {
+public class Funcionario {
     private int idFunc;
     private String nome;
     private String email;
@@ -18,17 +18,24 @@ public class Funcionarios {
     private String cargo;
     private String anoNasc;
 
-    public Funcionarios() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Funcionario() {
     }
 
-    
-    
+    public Funcionario(String nome, String email, String cpf, String fone, String cargo, String anoNasc) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.fone = fone;
+        this.cargo = cargo;
+        this.anoNasc = anoNasc;
+    }
+
+  
     public int getIdFunc() {
         return idFunc;
     }
 
-    public void setId(int idFunc) {
+    public void setIdFunc(int idFunc) {
         this.idFunc = idFunc;
     }
 
@@ -79,7 +86,5 @@ public class Funcionarios {
     public void setAnoNasc(String anoNasc) {
         this.anoNasc = anoNasc;
     }
-    
-    
-    
+
 }

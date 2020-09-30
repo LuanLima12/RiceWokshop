@@ -5,14 +5,15 @@
  */
 package Formularios;
 
-import Classes.ConexaoSQLite;
-import Classes.Funcionarios;
-import Classes.OperacoesSQLFuncionario;
+import Conexao.ConnectionFactory;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.DAO.CategoriaDAO;
+
 
 
 /**
@@ -21,11 +22,15 @@ import javax.swing.JOptionPane;
  */
 public class FrameAdcFunc extends javax.swing.JInternalFrame {
 
+    private Connection con = null;
+    private boolean result;
+    protected String cargo;
     /**
      * Creates new form FrameAdcFunc
      */
     public FrameAdcFunc() {
         initComponents();
+        con = ConnectionFactory.getConnection();
     }
 
     /**
@@ -82,13 +87,15 @@ public class FrameAdcFunc extends javax.swing.JInternalFrame {
             }
         });
 
-        AdcFuncCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vendedor", "Gerente" }));
+        AdcFuncCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione um cargo", "Vendedor", "Gerente" }));
+        AdcFuncCargo.setToolTipText("Vendedor, Gerente");
         AdcFuncCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AdcFuncCargoActionPerformed(evt);
             }
         });
 
+        AdcFuncCancelar.setBackground(new java.awt.Color(255, 51, 51));
         AdcFuncCancelar.setText("Cancelar");
         AdcFuncCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,6 +103,7 @@ public class FrameAdcFunc extends javax.swing.JInternalFrame {
             }
         });
 
+        AdcFuncSalvar.setBackground(new java.awt.Color(0, 204, 51));
         AdcFuncSalvar.setText("Salvar");
         AdcFuncSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,78 +196,59 @@ public class FrameAdcFunc extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_AdcFuncCancelarActionPerformed
 
     private void AdcFuncSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdcFuncSalvarActionPerformed
-        /* TODO add your handling code here:
-        Funcionarios funcionario = new Funcionarios();
-        funcionario.setNome(this.AdcFuncNome.getText());
-        funcionario.setAnoNasc(this.AdcFuncData.getText());
-        funcionario.setEmail(this.AdcFuncEmail.getText());
-        funcionario.setCpf(this.AdcFuncCPF.getText());
-        funcionario.setFone(this.AdcFuncFone.getText());
-        funcionario.setCargo(this.AdcFuncCargo.getToolTipText());
-        */
-        //System.out.println(funcionario.getCargo());
-        ConexaoSQLite conexao = new ConexaoSQLite();
-        conexao.conectar();
+    
+        //System.err.println(AdcFuncNome.getText());
+    
+    String sql = "INSERT INTO tbl_funcionario (nome, email, cpf, fone, cargo, dataNasci) VALUES (?, ?, ?, ?, ?, ?)";
         
-        /*OperacoesSQLFuncionario operacao = new OperacoesSQLFuncionario();
+        PreparedStatement stmt = null;
         
-        operacao.funcionarioInsert(this.AdcFuncNome.getText(),AdcFuncEmail.getText() ,
-                this.AdcFuncCPF.getText(), this.AdcFuncFone.getText(),
-                this.AdcFuncCargo.getToolTipText(), this.AdcFuncData.getText());*/
         
-        /*String sql = "INSERT INTO tbl_funcionarios ( "
-                + "nome, "
-                + "email, "
-                + "cpf, "
-                + "fone, "
-                + "cargo)"
-                + "VALUES("
-                + "'" + this.AdcFuncNome.getText() +"',"
-                + "'" + this.AdcFuncEmail.getText() +"',"
-                + "'" + this.AdcFuncCPF.getText() +"',"
-                + "'" + this.AdcFuncFone.getText() +"',"
-                + "'" + this.AdcFuncCargo.getToolTipText() +"')"
-                + ";";
+        if(AdcFuncCargo.getSelectedIndex()==1){
+            cargo = "vendedor";
+        }else if (AdcFuncCargo.getSelectedIndex()==2){
+            cargo = "gerente";
+        }else{
+            System.out.println("Selecione uma das opções de cargo");
+        }
         
-        PreparedStatement preparedStatement = new PreparedStatement();
         
-        try{
-            
-            
-            
-                
-            
-            preparedStatement.setString(1, funcionario.getNome());
-            preparedStatement.setString(2, funcionario.getEmail());
-            preparedStatement.setString(3, funcionario.getCpf());
-            preparedStatement.setString(4, funcionario.getFone());
-            preparedStatement.setString(5, funcionario.getCargo());
-            
-            int resultado = preparedStatement.executeUpdate();
-            
-            if (resultado == 1){
-                JOptionPane.showMessageDialog(null, "Funcionário cadastrado com sucesso!");
-            }else{
-                JOptionPane.showMessageDialog(null, "Funcionário não foi cadastrado, tente novamente.");
-            }
-            
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Funcionário não foi cadastrado, tente novamente.");
+        
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, AdcFuncNome.getText());
+            stmt.setString(2, AdcFuncEmail.getText());
+            stmt.setString(3, AdcFuncCPF.getText());
+            stmt.setString(4, AdcFuncFone.getText());
+            stmt.setString(5, cargo);
+            stmt.setString(6, AdcFuncData.getText());
+            stmt.executeUpdate();
+            result = true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex);
+            //System.err.println("Funcionario não inserido!");
+            result = false;
         }finally{
-            if(preparedStatement != null){
-                try {
-                    preparedStatement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(FrameAdcFunc.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            conexao.desconectar();
-        }*/
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+        
+        if (result = true){
+            JOptionPane.showMessageDialog(rootPane, "Cadastro efetuado com sucesso!");
+            AdcFuncNome.setText("");
+            AdcFuncEmail.setText("");
+            AdcFuncCPF.setText("");
+            AdcFuncFone.setText("");
+            cargo = null;
+            AdcFuncData.setText("");
+        }
+        
         
     }//GEN-LAST:event_AdcFuncSalvarActionPerformed
 
     private void AdcFuncCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdcFuncCargoActionPerformed
         // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_AdcFuncCargoActionPerformed
 
 

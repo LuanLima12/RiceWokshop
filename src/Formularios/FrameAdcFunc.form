@@ -154,11 +154,13 @@
     <Component class="javax.swing.JComboBox" name="AdcFuncCargo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
-            <StringItem index="0" value="Vendedor"/>
-            <StringItem index="1" value="Gerente"/>
+          <StringArray count="3">
+            <StringItem index="0" value="Selecione um cargo"/>
+            <StringItem index="1" value="Vendedor"/>
+            <StringItem index="2" value="Gerente"/>
           </StringArray>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Vendedor, Gerente"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AdcFuncCargoActionPerformed"/>
@@ -173,6 +175,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="AdcFuncCancelar">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="33" red="ff" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
       <Events>
@@ -181,6 +186,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="AdcFuncSalvar">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="cc" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Salvar"/>
       </Properties>
       <Events>
